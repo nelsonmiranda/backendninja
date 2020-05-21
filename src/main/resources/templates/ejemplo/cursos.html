@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1" />
+<title>Cursos</title>
+</head>
+<body>
+	<table>
+		<thead>
+			<tr>
+				<th>Nombre</th>
+				<th>Descripci&oacute;n</th>
+				<th>Precio</th>
+				<th>Horas</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="curso : ${cursos}">
+				<td><span th:text="${curso.nombre}"></span> </td>
+				<td><span th:text="${curso.descripcion}"></span> </td>
+				<td><span th:text="${curso.precio}"></span> </td>
+				<td><span th:text="${curso.horas}" ></span> </td>
+				<td><a href="#" th:href="@{'/cursos/' + ${curso.id} + '/edit'}">Editar</a></td>
+				<td><a href="#" th:href="@{'/cursos/deletecurso?id=' + ${curso.id} }">Eliminar</a></td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<form action="" th:action=" ${accion} == 'new' ? @{/cursos/addcurso} : @{/cursos/updatecurso}" th:object="${curso}" method="post">
+	    <p><input type="hidden" th:field="*{id}" /></p>
+		<p>Nombre: <input type="text" th:field="*{nombre}"/></p>
+		<p th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}">Nombre digitado es inválido</p>
+		<p>Descripci&oacute;n: <input type="text" th:field="*{descripcion}" /></p>
+		<p>Precio: <input type="number" th:field="*{precio} "/> </p>
+		<p>Horas: <input type="number" th:field="*{horas} "/> </p>
+		<p ><input type="submit" value="Guardar" /> </p>
+		
+	</form>
+</body>
+</html>

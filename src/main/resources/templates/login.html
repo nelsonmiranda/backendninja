@@ -9,28 +9,43 @@
 
   <link rel='stylesheet' href='http://codepen.io/assets/libs/fullpage/jquery-ui.css'>
 
-    <link rel="stylesheet" href="../static/css/style.css" media="screen" type="text/css" />
+    <link rel="stylesheet" th:href="@{/css/style.css}" media="screen" type="text/css" />
 
 </head>
 
 <body>
+	<div class="login-card">
+		<h1>
+			Acceso <img class="candado" src="#" th:src="@{/imgs/candado.png}">
+		</h1>
+		<br>
 
+	     <!--  
+		  <form action="#" th:action="@{/logincheck}" th:object="${usuarioCredential}" method="post">
+		    <input type="text" name="user" placeholder="Username" th:field="*{usuario}" >
+		    <input type="password" name="pass" placeholder="Password" th:field="*{password}">
+		    <div th:if="${error != null}" class="alert alert-danger">Usuario o Password inv&aacute;lido</div>
+		    <div th:if="${logout != null}" class="btn btn-warning">Logout sucessfully !</div>
+		    <input type="submit" name="login" class="login login-submit" value="Acceder">
+		  </form>
+		  -->
 
-  <div class="login-card">
-    <h1>Acceso <img class="candado"  src="../static/imgs/candado.png"></h1><br>
-     
-  <form>
-    <input type="text" name="user" placeholder="Username">
-    <input type="password" name="pass" placeholder="Password">
-    <input type="submit" name="login" class="login login-submit" value="Acceder">
-  </form>
+		<form th:action="@{/logincheck}" method="POST">
+			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"> 
+			<input type="text"  placeholder="Username" name="usuario" id="usuario"> 
+			<input type="password" placeholder="Password" name="password" id="password">
+			<div th:if="${error != null}" class="alert alert-danger">Usuario
+				o Password inv&aacute;lido</div>
+			<div th:if="${logout != null}" class="btn btn-warning">Logout
+				sucessfully !</div>
+			<input type="submit" name="login" class="login login-submit"
+				value="Acceder">
+		</form>
 
-  <div class="login-help">
-    <a href="#">Forgot Password</a>
-  </div>
-</div>
-
-
+		<div class="login-help">
+			<a href="#">Forgot Password</a>
+		</div>
+	</div>
 </body>
 
 </html>
