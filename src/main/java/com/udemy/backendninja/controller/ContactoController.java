@@ -10,6 +10,9 @@ import org.springframework.web.servlet.ModelAndView;
 import com.udemy.backendninja.entity.Curso;
 import com.udemy.backendninja.service.ejemplo.CursoService;
 
+/**
+ * The Class ContactoController.
+ */
 @Controller
 @RequestMapping("/contactos")
 public class ContactoController {
@@ -20,6 +23,11 @@ public class ContactoController {
 
 	private static final String CONTACTOS_VIEW = "estudiantes";
 
+	/**
+	 * Mostrar contactos.
+	 *
+	 * @return the model and view
+	 */
 	@GetMapping("/list")
 	public ModelAndView mostrarContactos() {
 		ModelAndView mav = new ModelAndView(CONTACTOS_VIEW);

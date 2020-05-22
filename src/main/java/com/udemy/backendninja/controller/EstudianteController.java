@@ -7,6 +7,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,28 +21,52 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.udemy.backendninja.entity.Estudiante;
+import com.udemy.backendninja.entity.Usuario;
 import com.udemy.backendninja.service.EstudianteService;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class EstudianteController.
+ */
 @Controller
 @RequestMapping("/estudiantes")
 public class EstudianteController {
 	
+	/** The Constant LOG. */
 	private static final Log LOG = LogFactory.getLog(EstudianteController.class);
 	
+	/** The Constant ESTUDIANTE_VIEW. */
 	private static final String ESTUDIANTE_VIEW = "estudiantes";
 
+	/** The estudiante service. */
 	@Autowired
 	@Qualifier("estudianteServiceImpl")
 	private EstudianteService estudianteService;
 	
+	/**
+	 * List estudiantes.
+	 *
+	 * @param model the model
+	 * @return the string
+	 */
+	@PreAuthorize("hasRole('Administrador')") //Save in database ROLE_Administrador
 	@GetMapping("/list")
 	public String listEstudiantes(Model model) {
+		//User usuario = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		//model.addAttribute("usuario", usuario.getUsername());
 		model.addAttribute("estudiantes", estudianteService.listEstudiantes());
 		model.addAttribute("estudiante", new Estudiante());
 		
 		return ESTUDIANTE_VIEW;
 	}
 	
+	/**
+	 * Creates the.
+	 *
+	 * @param request the request
+	 * @return the string
+	 */
+	@PreAuthorize("hasRole('Administradors')")
 	@PostMapping(name = "create")
 	public String  create(HttpServletRequest request) {
 		Estudiante estudiante = new Estudiante();
@@ -51,6 +78,14 @@ public class EstudianteController {
 		return "redirect:/estudiantes/list";
 	}
 	
+	/**
+	 * Adds the estudiante.
+	 *
+	 * @param estudiante the estudiante
+	 * @param bindingResult the binding result
+	 * @return the string
+	 */
+	@PreAuthorize("hasRole('Administrador')") //Save in database ROLE_Administrador
 	@PostMapping("/add")
 	public String addEstudiante(@Valid @ModelAttribute(name = "estudiante") Estudiante estudiante, BindingResult bindingResult) {
 		
@@ -66,6 +101,12 @@ public class EstudianteController {
 		return "redirect:/estudiantes/list";
 	}
 	
+	/**
+	 * Adds the estudiante.
+	 *
+	 * @param request the request
+	 * @return the string
+	 */
 	@PostMapping("/update")
 	public String addEstudiante(HttpServletRequest request) {
 		
@@ -81,6 +122,12 @@ public class EstudianteController {
 		return "redirect:/estudiantes/list";
 	}
 	
+	/**
+	 * Delete estudiante.
+	 *
+	 * @param id the id
+	 * @return the string
+	 */
 	@PostMapping("/delete")
 	public String deleteEstudiante(@ModelAttribute(name = "id") int id){
 		
@@ -94,6 +141,12 @@ public class EstudianteController {
 		return "redirect:/estudiantes/list";
 	}
 	
+	/**
+	 * Find.
+	 *
+	 * @param id the id
+	 * @return the estudiante
+	 */
 	@GetMapping("/find/{id}")
 	@ResponseBody
 	public Estudiante find(@PathVariable("id") int id) {
